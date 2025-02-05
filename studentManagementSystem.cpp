@@ -88,102 +88,128 @@ void Student::getdetails(int roll_no)
           cout << "Student not found!" << endl;
      }
 }
-
 void Student::showresult(int roll_nom)
 {
-     ifstream ifs("Student.txt");
-     int existing_student;
-     while (ifs >> name >> roll_no >> cls >> div >> dob >> address >> contact)
-     {
-          int existing_student = roll_no;
-          // cout << existing_student << endl;
-          // cout << roll_nom << endl;
-          if (existing_student == roll_nom)
-          {
-               cout << "Result: " << endl;
-               ifstream ifs("generateMarks.txt");
-               bool found = false;
-               while (ifs >> this->roll_no >> maths >> english >> science)
-               {
-                    if (this->roll_no == roll_no)
-                    {
-                         cout << "Maths: " << maths << endl;
-                         cout << "English: " << english << endl;
-                         cout << "Science: " << science << endl;
-                         found = true;
-                         break;
-                    }
-               }
-               ifs.close();
-               if (!found)
-               {
-                    cout << "Student's result not generated yet" << endl;
-               }
-          }
+    ifstream ifs("Student.txt");
+    bool student_found = false;
+    string name;
+    int roll_no, cls, contact;
+    char div;
+    string dob, address;
 
-          else
-          {
-               cout << "Sorry your are not a registered student " << endl;
-          }
-     }
+   
+    while (ifs >> name >> roll_no >> cls >> div >> dob >> address >> contact)
+    {
+        if (roll_no == roll_nom)
+        {
+            student_found = true;  
+            break;
+        }
+    }
+    ifs.close();
+
+    if (!student_found)
+    {
+        cout << "Student not found!" << endl;
+        return;  
+    }
+
+    cout << "Result: " << endl;
+    ifstream marks_ifs("generateMarks.txt");
+    bool marks_found = false;
+    int maths, english, science;
+
+    while (marks_ifs >> roll_no >> maths >> english >> science)
+    {
+        if (roll_no == roll_nom)
+        {
+            marks_found = true;
+            cout << "Maths: " << maths << endl;
+            cout << "English: " << english << endl;
+            cout << "Science: " << science << endl;
+            break;
+        }
+    }
+    marks_ifs.close();
+
+    if (!marks_found)
+    {
+        cout << "Result not generated yet!" << endl;
+    }
 }
+
+
 void Student::showgrades(int roll_nom)
 {
-     ifstream ifs("Student.txt");
-     int existing_student;
-     while (ifs >> name >> roll_no >> cls >> div >> dob >> address >> contact)
-     {
-          int existing_student = roll_no;
-          // cout << existing_student << endl;
-          // cout << roll_nom << endl;
-          if (existing_student == roll_nom)
-          {
-               cout << "Grade of roll number " << roll_no << " is: ";
-               ifstream ifs("generateMarks.txt");
-               bool found = false;
-               int maths, english, science;
-               while (ifs >> this->roll_no >> maths >> english >> science)
-               {
-                    if (this->roll_no == roll_no)
-                    {
-                         int total = maths + english + science;
-                         double average = total / 3.0;
+    ifstream ifs("Student.txt");
+    bool student_found = false;
+    string name;
+    int roll_no, cls, contact;
+    char div;
+    string dob, address;
 
-                         char grade;
-                         if (average >= 90)
-                         {
-                              grade = 'A';
-                         }
-                         else if (average >= 75)
-                         {
-                              grade = 'B';
-                         }
-                         else if (average >= 50)
-                         {
-                              grade = 'C';
-                         }
-                         else
-                         {
-                              grade = 'D';
-                         }
+    while (ifs >> name >> roll_no >> cls >> div >> dob >> address >> contact)
+    {
+        if (roll_no == roll_nom)
+        {
+            student_found = true;  
+            break;
+        }
+    }
+    ifs.close();
 
-                         cout << grade << endl;
-                         found = true;
-                         break;
-                    }
-                    ifs.close();
-                    if (!found)
-                    {
-                         cout << "Student not registered" << endl;
-                    }
-               }
-          }
-          else
-          {
-               cout << "No Grade generated as student is not registered " << endl;
-          }
-     }
+    if (!student_found)
+    {
+        cout << "No student found!" << endl;
+        return;  
+    }
+
+  
+    cout << "Grade of roll number " << roll_nom << ": " << endl;
+    ifstream marks_ifs("generateMarks.txt");
+    bool marks_found = false;
+    int maths, english, science;
+
+    while (marks_ifs >> roll_no >> maths >> english >> science)
+    {
+        if (roll_no == roll_nom)
+        {
+            marks_found = true;
+
+         
+            int total = maths + english + science;
+            double average = total / 3.0;
+
+            char grade;
+            if (average >= 90)
+            {
+                grade = 'A';
+            }
+            else if (average >= 75)
+            {
+                grade = 'B';
+            }
+            else if (average >= 50)
+            {
+                grade = 'C';
+            }
+            else
+            {
+                grade = 'D';
+            }
+
+            cout << "Grade: " << grade << endl;
+            break;
+        }
+    }
+    marks_ifs.close();
+
+    if (!marks_found)
+    {
+        cout << "Grades not generated yet!" << endl;
+    }
 }
+
 
 void Student::showAllStudents()
 {
@@ -271,43 +297,48 @@ void Teacher::dispDetails(int tr_id)
 
 void Teacher::generateResult(int roll_nom)
 {
-     ifstream ifs("Student.txt");
-     string name;
-     int roll_no, cls, contact;
-     char div;
-     string dob, address;
-     int existing_student;
-     while (ifs >> name >> roll_no >> cls >> div >> dob >> address >> contact)
-     {
-          int existing_student = roll_no;
-          cout << existing_student << endl;
-          cout << roll_nom << endl;
+    ifstream ifs("Student.txt");
+    string name;
+    int roll_no, cls, contact;
+    char div;
+    string dob, address;
 
-          if (existing_student == roll_nom)
-          {
-               int maths, science, english;
-               cout << "Enter marks:" << endl;
-               cout << "Maths marks: ";
-               cin >> maths;
-               cin.ignore();
-               cout << "English marks: ";
-               cin >> english;
-               cin.ignore();
-               cout << "Science marks: ";
-               cin >> science;
+    bool student_found = false;
 
-               ofstream ofs("generateMarks.txt", ios::app);
-               ofs << roll_no << " " << maths << " " << english << " " << science << endl;
-               ofs.close();
-               cout << "Marks stored successfully" << endl;
-          }
-          else
-          {
-               cout << "Student not found" << endl;
-          }
-     }
-     ifs.close();
+
+    while (ifs >> name >> roll_no >> cls >> div >> dob >> address >> contact)
+    {
+        if (roll_no == roll_nom)
+        {
+            student_found = true;  
+            break;
+        }
+    }
+    ifs.close();
+
+    if (!student_found)
+    {
+        cout << "Student not found!" << endl;
+        return; 
+    }
+
+    cout << "Enter marks for roll number " << roll_nom << ": " << endl;
+    int maths, english, science;
+
+    cout << "Maths marks: ";
+    cin >> maths;
+    cout << "English marks: ";
+    cin >> english;
+    cout << "Science marks: ";
+    cin >> science;
+
+    ofstream ofs("generateMarks.txt", ios::app);
+    ofs << roll_nom << " " << maths << " " << english << " " << science << endl;
+    ofs.close();
+
+    cout << "Marks stored successfully!" << endl;
 }
+
 
 void Teacher::generateGrade()
 {
